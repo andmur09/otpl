@@ -129,6 +129,8 @@ class PlanTemporalNetwork:
             plans.append(plan)
         # Sets the plan to the best plan i.e. the last plan in the planner output
         plan = plans[-1]
+        print(plan)
+
         for line in plan:
             # parse line
             time = float(line.split(':')[0])
@@ -176,7 +178,6 @@ class PlanTemporalNetwork:
         """
 
         for index, happening in enumerate(self.time_sorted_happenings):
-
             # find time spec of happening
             if happening.type == HappeningType.ACTION_START:
                 time_spec = TimeSpec.AT_START
@@ -291,7 +292,7 @@ class PlanTemporalNetwork:
                     start_tp = self.temporal_network.get_timepoint_by_id(source)
                     end_tp = self.temporal_network.get_timepoint_by_id(sink)
                     dist = self.temporal_network.find_shortest_path(start_tp, end_tp)
-                    if -self.epsilon < dist:
+                    if -self.epsilon < distance:
                         self.temporal_network.add_constraint(Constraint("Interference Constraint between {} and {}".format(start_tp.id, end_tp.id), start_tp, end_tp, "stc", {"lb": self.epsilon, "ub": self.infinity}))
 
     # =================== #

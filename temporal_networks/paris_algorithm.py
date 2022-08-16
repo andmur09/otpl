@@ -58,14 +58,12 @@ def linear_probability(constraint: Constraint, n: int) -> tuple[list]:
 
 def paris(PSTN: ProbabilisticTemporalNetwork, pres: int = 15, solver: str = "gurobi"):
     '''
-    Description:    Makes matrices in the form Ax <= b and c^Tx representing the PSTN, which are used as input to the optimisation solver. For strong controllability Linear program.
+    Description:    Implementation of the PARIS algorithm for strong controllability of PSTNs from "PARIS: a Polynomial-Time, Risk-Sensitive Scheduling Algorithm for Probabilistic
+                    Simple Temporal Networks with Uncertainty", Santana et al. 2016.
     Input:          PSTN - Instance of PSTN to be solved
-                    name - name to call model
-                    pres - number of points for which to partition the function for probabilistic constraints (if pres = 50, then LHS of mode partitioned at 50 points, and RHS of mode partitioned at 50 points)
-                    folder - folder to save Gurobi files to if log=True
-                    log - if true writes Gurobi files to file
-                    weight - weight to apply to relaxation cost terms in objective
-    Output:         m - A Gurobi model containing all variables, constraints and objectives
+                    pres - Number of points for which to partition the function for probabilistic constraints (if pres = 50, then LHS of mode partitioned at 50 points, and RHS of mode partitioned at 50 points)
+                    solver - Defines the LP solver to be used. Can be "gurobi" or "clp"
+    Output:         m - A model containing all variables, constraints and objectives
     '''
     if solver == "clp":
         m = CyLPModel()
@@ -159,7 +157,7 @@ def paris(PSTN: ProbabilisticTemporalNetwork, pres: int = 15, solver: str = "gur
                     m += F_u - grad*omega_u >= const
     
         # Sets objective to minimise risk
-        m += m.getVarByName("0") == 0
+        #m += m.getVarByName("0") == 0
         risk = m.getVarByName("Risk")
         m += sum(prob_vars) == risk
         m.objective = risk
@@ -188,36 +186,36 @@ def paris(PSTN: ProbabilisticTemporalNetwork, pres: int = 15, solver: str = "gur
             m.addVar(vtype=GRB.CONTINUOUS, name=str(t.id))
     
         for c in cu:
-            m.addVar(vtype=GRB.CONTINUOUS, obj = 1, name = c.name + "_Fl")
-            m.addVar(vtype=GRB.CONTINUOUS, obj = 1, name = c.name + "_Fu")
+            m.addVar(vtype=GRB.CONTINUOUS, obj = 1, name = c.get_description() + "_Fl")
+            m.addVar(vtype=GRB.CONTINUOUS, obj = 1, name = c.get_description() + "_Fu")
 
         for c in cp:
-            m.addVar(lb=0, ub=c.mu, vtype=GRB.CONTINUOUS, name = c.name + "_l")
-            m.addVar(lb=c.mu, ub=inf, vtype=GRB.CONTINUOUS, name = c.name + "_u")
+            m.addVar(lb=0, ub=c.mean, vtype=GRB.CONTINUOUS, name = c.get_description() + "_l")
+            m.addVar(lb=c.mean, ub=inf, vtype=GRB.CONTINUOUS, name = c.get_description() + "_u")
         m.update()
 
         # Adds constraints
         for c in cc:
             # Collects indices of required variables in variable vector x
-            start, end = m.getVarByName(c.source.id), m.getVarByName(c.sink.id)
+            start, end = m.getVarByName(str(c.source.id)), m.getVarByName(str(c.sink.id))
             # Adds constraint of the form b_j - b_i - r_u_{ij} <= y_{ij}
-            m.addConstr(end - start <= c.intervals["ub"])
+            m.addConstr(end - start <= c.ub)
             # Adds constraint of the form b_i - b_j -  r_l_{ij} <= -x_{ij}
-            m.addConstr(end - start >= c.intervals["lb"])
+            m.addConstr(end - start >= c.lb)
                     
         for c in cu:
-            incoming = PSTN.incomingContingent(c)
+            PSTN.incoming_probabilistic(c)
             ## Start time-point in constraint is uncontrollable
             if incoming["start"] != None:
                 incoming = incoming["start"]
-                start, end = m.getVarByName(incoming.source.id), m.getVarByName(c.sink.id)
-                omega_l, omega_u = m.getVarByName(incoming.name + "_l"), m.getVarByName(incoming.name + "_u")
-                F_l, F_u = m.getVarByName(c.name + "_Fl"), m.getVarByName(c.name + "_Fu")
+                start, end = m.getVarByName(str(incoming.source.id)), m.getVarByName(str(c.sink.id))
+                omega_l, omega_u = m.getVarByName(incoming.get_description() + "_l"), m.getVarByName(incoming.get_description() + "_u")
+                F_l, F_u = m.getVarByName(c.get_description() + "_Fl"), m.getVarByName(c.get_description() + "_Fu")
          
                 # For constraint of the form bj - bi - l_i <= y_{ij}
-                m.addConstr(end - start - omega_l <= c.intervals["ub"])
+                m.addConstr(end - start - omega_l <= c.ub)
                 # For constraint of the form bi - bj + u_i <= -x_{ij}
-                m.addConstr(end - start - omega_u >= c.intervals["lb"])
+                m.addConstr(end - start - omega_u >= c.lb)
 
                  # Adds piecewise linear constraints.
                 partitions = linear_probability(incoming, pres)
@@ -235,14 +233,14 @@ def paris(PSTN: ProbabilisticTemporalNetwork, pres: int = 15, solver: str = "gur
             ## End time-point in constraint is uncontrollable
             elif incoming["end"] != None:
                 incoming = incoming["end"]
-                start, end = m.getVarByName(c.source.id), m.getVarByName(incoming.source.id)
-                omega_l, omega_u = m.getVarByName(incoming.name + "_l"), m.getVarByName(incoming.name + "_u")
-                F_l, F_u = m.getVarByName(c.name + "_Fl"), m.getVarByName(c.name + "_Fu")
+                start, end = m.getVarByName(str(c.source.id)), m.getVarByName(str(incoming.source.id))
+                omega_l, omega_u = m.getVarByName(incoming.get_description() + "_l"), m.getVarByName(incoming.get_description() + "_u")
+                F_l, F_u = m.getVarByName(c.get_description() + "_Fl"), m.getVarByName(c.get_decsription() + "_Fu")
             
                 # For constraint of the form b_j + u_{ij} - b_i <= y_{ij}      
-                m.addConstr(end - start + omega_u <= c.intervals["ub"])        
+                m.addConstr(end - start + omega_u <= c.ub)        
                 # For constraint of the form b_i - bj - l_{ij} <= -x_{ij}
-                m.addConstr(end - start + omega_l >= c.intervals["lb"])
+                m.addConstr(end - start + omega_l >= c.lb)
 
                 # Adds piecewise linear constraints.
                 partitions = linear_probability(incoming, pres)
@@ -257,7 +255,7 @@ def paris(PSTN: ProbabilisticTemporalNetwork, pres: int = 15, solver: str = "gur
                     grad, const = partition[0], partition[1]
                     m.addConstr(F_u - grad*omega_u >= const)
                 
-        m.addConstr(m.getVarByName(PSTN.getStartTimepointName()) == 0)
+        #m.addConstr(m.getVarByName("0") == 0)
         m.update()
         risk = m.getVarByName("Risk")
         m.addConstr(gp.quicksum([v for v in m.getVars() if v.varName[-2:] in ["Fu", "Fl"]]) == risk, 'risk')
@@ -272,7 +270,8 @@ def paris(PSTN: ProbabilisticTemporalNetwork, pres: int = 15, solver: str = "gur
             for v in m.getVars():
                 print("Variable {}: ".format(v.varName) + str(v.x))
         else:
-            print("Optimisation failed.")
+            m.computeIIS()
+            m.write("logs/{}.ilp".format(PSTN.name))
         return m
         
         

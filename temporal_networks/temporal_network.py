@@ -1,12 +1,13 @@
 #from msilib.schema import Error
 from queue import PriorityQueue
 import json
-from statistics import correlation
 from xmlrpc.client import Boolean
 import copy
 from math import inf
 import numpy as np
 from scipy import stats
+import subprocess
+from graphviz import Digraph
 
 class TimePoint:
     """
@@ -26,7 +27,6 @@ class TimePoint:
         """
         return TimePoint(self.id, self.label[:])
 
-    
     def __str__(self) -> str:
         """
         prints string representation of time-point
@@ -429,6 +429,21 @@ class TemporalNetwork:
         for constraint in self.constraints:
             print("\t{} -> {} [label=\"({},{})\"];".format(constraint.source, constraint.sink, constraint.lb, constraint.ub))
         print("}")
+    
+    def plot_dot_graph(self):
+        """
+        Plot the graph as a dot graph using graphviz
+        """
+        plot = Digraph()
+        for timePoint in self.time_points:
+            plot.node(name=timePoint.id, label=str(timePoint.id))
+        
+        for constraint in self.constraints:
+            plot.edge(str(constraint.source.id), str(constraint.sink.id), label="{}: [{:.3f}, {:.3f}]".format(constraint.label, constraint.lb, constraint.ub))
+        try:
+            plot.render('logs/{}_plot.png'.format(self.name), view=True)
+        except subprocess.CalledProcessError:
+            print("Please close the PDF and rerun the script")
 
     def print_graph_as_json(self):
         """
@@ -631,6 +646,39 @@ class ProbabilisticTemporalNetwork(TemporalNetwork):
         corr_pstn.time_points = copy.deepcopy(self.time_points)
         corr_pstn.constraints = copy.deepcopy(self.constraints)
         return corr_pstn
+
+    def print_dot_graph(self):
+        """
+        print the graph in DOT format.
+        """
+        print("digraph G {")
+        # declare nodes
+        for time_point in self.time_points:
+            print("\t" + str(time_point.id) + " [label=\"" + time_point.label + "\"];")
+        # declare edges
+        for constraint in self.constraints:
+            print("\t{} -> {} [label=\"({},{})\"];".format(constraint.source, constraint.sink, constraint.lb, constraint.ub))
+        print("}")
+    
+    def plot_dot_graph(self):
+        """
+        Plot the graph as a dot graph using graphviz
+        """
+        requirements = self.get_requirement_constraints()
+        probabilistics = self.get_probabilistic_constraints()
+
+        plot = Digraph()
+        for timePoint in self.time_points:
+            plot.node(name=str(timePoint.id), label=str(timePoint.id))
+        
+        for constraint in requirements:
+            plot.edge(str(constraint.source.id), str(constraint.sink.id), label="{}: [{}, {}]".format(constraint.get_description(), constraint.lb, constraint.ub))
+        for constraint in probabilistics:
+            plot.edge(str(constraint.source.id), str(constraint.sink.id), label="{}: N({}, {})".format(constraint.get_description(), constraint.mean, constraint.sd))
+        try:
+            plot.render('logs/plot.png', view=True)
+        except subprocess.CalledProcessError:
+            print("Please close the PDF and rerun the script")
     
 class CorrelatedProbabilisticTemporalNetwork(ProbabilisticTemporalNetwork):
     """
