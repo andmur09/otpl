@@ -12,7 +12,7 @@ from pddl.grounding import Grounding
 from pddl.operator import Operator
 from pddl.time_spec import TimeSpec
 from pddl.timed_initial_literal import TimedInitialLiteral
-from temporal_networks.temporal_network import TemporalPlanNetwork
+from temporal_networks.simple_temporal_network import SimpleTemporalNetwork
 import re
 
 class HappeningType(Enum):
@@ -51,7 +51,7 @@ class PlanTemporalNetwork:
         self.infinity = 1000000000
         
         # map temporal network nodes to happenings
-        self.temporal_network : TemporalPlanNetwork = None
+        self.temporal_network : SimpleTemporalNetwork = None
         self.happenings : list[Happening] = []
         self.time_sorted_happenings : list[Happening] = []
 
@@ -69,7 +69,7 @@ class PlanTemporalNetwork:
         if not self.grounding.grounded:
             self.grounding.ground_problem(self.domain, self.problem)
 
-        self.temporal_network = TemporalPlanNetwork()
+        self.temporal_network = SimpleTemporalNetwork()
 
         # add plan start happening to network
         self.temporal_network.add_node(0, "PLAN_START")
