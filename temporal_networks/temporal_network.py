@@ -43,10 +43,10 @@ class Constraint:
     """
     represents a temporal network constraint (edge in the network)
     """
-    def __init__(self, label: str, source: TimePoint, sink: TimePoint, type: str, duration_bound: dict[str, str], distribution: dict[str, str] = None):
-        self.label = label
+    def __init__(self, source: TimePoint, sink: TimePoint, label: str, type: str, duration_bound: dict[str, str], distribution: dict[str, str] = None):
         self.source = source
         self.sink = sink
+        self.label = label
         assert type in ("stc, pstc"), "Invalid Constraint type, type must be 'stc' for simple temporal constraint, or 'pstc' for probabilistic simple temporal constraint"
         self.type = type
         assert list(duration_bound.keys()) == ["lb", "ub"],  "Duration_bound should be in the form {'lb: float, 'ub': float}"
@@ -59,7 +59,7 @@ class Constraint:
         """
         returns a string of the from c(source.id, sink.id)
         """
-        return "c({},{})".format(str(self.source.id), str(self.sink.id))
+        return "c({},{})".format((self.source.id), (self.sink.id))
     
     def copy_constraint(self):
         """
@@ -97,7 +97,7 @@ class Constraint:
         """
         returns the constraint as a dictionary for use with json
         """
-        to_return = {"source": self.source.id, "sink": self.sink.id, "label": self.label, "type": self.type, "duration_bound": {"lb": self.lb, "ub": self.lb}}
+        to_return = {"source": self.source.id, "sink": self.sink.id, "label": self.label, "type": self.type, "duration_bound": {"lb": self.lb, "ub": self.ub}}
         if self.type == "pstc":
             to_return["distribution"] = {"mean": self.mean, "sd": self.sd}
         return to_return
@@ -187,6 +187,142 @@ class Correlation:
         self.correlation = np.transpose(P, (2, 0 ,1))[0]
         self.covariance = self.auxiliary @ self.correlation @ self.auxiliary.transpose()
 
+class TemporalPlanNetwork:
+    """
+    represents a simple temporal network as a graph.
+    """
+    def __init__(self) -> None:
+        self.nodes : list[int] = []
+        self.labels : dict[int, str] = {}
+        self.edges = {}
+        self.edge_labels = {}
+
+    def add_node(self, node : int, label : str) -> None:
+        """
+        add a node to the network with label
+        """
+        self.nodes.append(node)
+        self.edges[node] = {node: 0}
+        self.edge_labels[node] = {node: "Self edge {}".format(node)}
+        self.labels[node] = label
+
+    def add_edge(self, node1 : int, node2 : int, label: str, duration_bound : float) -> None:
+        """
+        add an edge to the network with duration bound.
+        update the duration bound only if tighter than the current one.
+        """
+        print("\n", node1, node2, label)
+        if node1 not in self.edges:
+            self.edges[node1] = {}
+            self.edge_labels[node1] = {}
+        if node2 not in self.edges[node1]:
+            self.edges[node1][node2] = duration_bound
+            print(self.edge_labels)
+            print(self.edges)
+            self.edge_labels[node1][node2] = label
+        elif duration_bound < self.edges[node1][node2]:
+            self.edges[node1][node2] = duration_bound
+            self.edge_labels[node1][node2] = label
+
+    def floyd_warshall(self) -> bool:
+        """
+        use Floyd-Warshall to put the graph in all-pairs shortest path form.
+        returns True if the network is temporally consistent (no negative cycles)
+        """
+        # initialize missing edges 
+        for node1 in self.nodes:
+            for node2 in self.nodes:
+                if node1 != node2 and node2 not in self.edges[node1]:
+                    self.edges[node1][node2] = float("inf")
+        # run Floyd-Warshall
+        for k in self.nodes:
+            for i in self.nodes:
+                for j in self.nodes:
+                    self.edges[i][j] = min(self.edges[i][j], self.edges[i][k] + self.edges[k][j])
+                    # check for negative cycles
+                    if i==j and self.edges[i][j] < 0:
+                        return False
+        return True
+
+    def find_shortest_path(self, source : int, sink : int) -> float:
+        """
+        find the shortest path using dijkstras search
+        """
+        distances = dict.fromkeys(self.nodes, float("inf"))
+        distances[source] = 0
+        queue = PriorityQueue()
+        visited = set()
+        queue.put((0, source))
+        while not queue.empty():
+            distance, node = queue.get()
+            if node == sink: return distance
+            if node in visited: continue
+            visited.add(node)
+            if node not in self.edges: continue
+            for neighbor in self.edges[node]:
+                if neighbor in visited: continue
+                if distances[node] + self.edges[node][neighbor] < distances[neighbor]:
+                    distances[neighbor] = distances[node] + self.edges[node][neighbor]
+                    queue.put((distances[neighbor], neighbor))
+        return float("inf")
+
+    def make_minimal(self):
+        """
+        removes redundant edges from the network, assuming that the
+        network is temporally consistent and already in all-pairs
+        shortest path form.
+        Reference:
+        Nicola Muscettola, Paul Morris, and Ioannis Tsamardinos;
+        "Reformulating Temporal Plans For Efficient Execution";
+        In Principles of Knowledge Representation and Reasoning (1998).
+        """
+        for k in self.nodes:
+            for i in self.nodes:
+                if i == k: continue
+                if k not in self.edges[i]: continue
+                for j in self.nodes:
+                    if i == j or j == k: continue
+                    if j not in self.edges[k]: continue
+                    if j not in self.edges[i]: continue
+                    if self.edges[i][j] < self.edges[i][k] + self.edges[k][j]: continue
+                    if self.edges[i][j] < 0 and self.edges[i][k] < 0:
+                        del self.edges[i][j]
+                    elif self.edges[i][j] >=0 and self.edges[k][j] >= 0:
+                        del self.edges[i][j]
+                        
+    def print_dot_graph(self):
+        """
+        print the graph in DOT format.
+        """
+        print("digraph G {")
+        # declare nodes
+        for node in self.nodes:
+            print("\t" + str(node) + " [label=\"" + self.labels[node] + "\"];")
+        # declare edges
+        for node1 in self.nodes:
+            for node2 in self.edges[node1]:
+                if node1 == node2: continue
+                if self.edges[node1][node2] == float("inf"): continue
+                print("\t{} -> {} [label=\"{}: [{}]\"];".format(node1, node2, self.edge_labels[node1][node2], self.edges[node1][node2]))
+        print("}")
+
+    def print_graph_as_json(self):
+        """
+        print the graph in JSON format.
+        """
+        print("{")
+        print("\t\"nodes\": [")
+        for node in self.nodes:
+            print("\t\t{\"id\": " + str(node) + ", \"label\": \"" + self.labels[node] + "\"},")
+        print("\t],")
+        print("\t\"edges\": [")
+        for node1 in self.nodes:
+            for node2 in self.edges[node1]:
+                if node1 == node2: continue
+                if self.edges[node1][node2] == float("inf"): continue
+                print("\t\t{\"source\": " + str(node1) + ", \"target\": " + str(node2) + ", \"label\": \"" + str(self.edges[node1][node2]) + "\"},")
+        print("\t]")
+        print("}")
 
 class TemporalNetwork:
     """
@@ -197,6 +333,28 @@ class TemporalNetwork:
         self.time_points : list[TimePoint] = []
         self.constraints: list[Constraint] = []
     
+    def parse_from_temporal_plan_network(self, temporal_plan_network: TemporalPlanNetwork):
+        """
+        Parses from an instance of TemporalPlanNetwork as output from the temporal plan. Changes bidirectional edges to be uni-directional.
+        """
+        for node in temporal_plan_network.nodes:
+            self.add_time_point(TimePoint(node, temporal_plan_network.labels[node]))
+
+        for node1 in temporal_plan_network.edges:
+            for node2 in temporal_plan_network.edges[node1]:
+                print("\nNode1: {}, Node2: {}, Duration: {}".format(node1, node2, temporal_plan_network.edges[node1][node2]))
+                if node1 == node2: continue
+                elif temporal_plan_network.edges[node1][node2] > 0:
+                    print("Constraint is an upper bound, adding edge {} -> {}".format(node1, node2))
+                    edge = Constraint(self.get_timepoint_by_id(node1), self.get_timepoint_by_id(node2), temporal_plan_network.edge_labels[node1][node2], "stc", {"lb": 0.01, "ub": temporal_plan_network.edges[node1][node2]})
+                elif temporal_plan_network.edges[node1][node2] < 0:
+                    print("Constraint is a lower bound, adding edge {} -> {}".format(node2, node1))
+                    edge = Constraint(self.get_timepoint_by_id(node2), self.get_timepoint_by_id(node1), temporal_plan_network.edge_labels[node1][node2],"stc", {"lb": -temporal_plan_network.edges[node1][node2], "ub": inf})
+                elif temporal_plan_network.edges[node1][node2] == 0:
+                    print("Constraint duration = 0, adding as a lower bound on edge {} -> {}".format(node2, node1))
+                    edge = Constraint(self.get_timepoint_by_id(node2), self.get_timepoint_by_id(node1), temporal_plan_network.edge_labels[node1][node2],"stc", {"lb": temporal_plan_network.edges[node1][node2], "ub": inf})
+                self.add_constraint(edge)
+
     def copy(self):
         """
         returns a copy of the temporal network.
@@ -250,15 +408,15 @@ class TemporalNetwork:
         elif existing.source == constraint.source:
             # Checks whether the new constraint has a tighter bound
             if constraint.ub < existing.ub:
-                existing.ub = constraint.ub
+                existing.duration_bound["ub"] = constraint.ub
             elif constraint.lb > existing.lb:
-                existing.lb = constraint.lb
+                existing.duration_bound["lb"] = constraint.lb
         # If the source and sink time-points are the wrong way round in the new constraint versus existing
         elif existing.sink == constraint.source:
             if -constraint.lb < existing.ub:
-                existing.ub = -constraint.lb
+                existing.duration_bound["ub"] = -constraint.lb
             if -constraint.ub > existing.lb:
-                existing.lb = -constraint.ub
+                existing.duration_bound["lb"] = -constraint.ub
 
     def get_adjacency_matrix(self) -> dict[TimePoint, dict]:
         """
@@ -427,7 +585,7 @@ class TemporalNetwork:
             print("\t" + str(time_point.id) + " [label=\"" + time_point.label + "\"];")
         # declare edges
         for constraint in self.constraints:
-            print("\t{} -> {} [label=\"({},{})\"];".format(constraint.source, constraint.sink, constraint.lb, constraint.ub))
+            print("\t{} -> {} [label=\"{}: [{}, {}]\"];".format(constraint.source.id, constraint.sink.id, constraint.label, constraint.lb, constraint.ub))
         print("}")
     
     def plot_dot_graph(self):
@@ -436,7 +594,7 @@ class TemporalNetwork:
         """
         plot = Digraph()
         for timePoint in self.time_points:
-            plot.node(name=timePoint.id, label=str(timePoint.id))
+            plot.node(name=str(timePoint.id), label=str(timePoint.id))
         
         for constraint in self.constraints:
             plot.edge(str(constraint.source.id), str(constraint.sink.id), label="{}: [{:.3f}, {:.3f}]".format(constraint.label, constraint.lb, constraint.ub))
@@ -472,34 +630,6 @@ class TemporalNetwork:
         toDump["constraints"] = [c.to_json() for c in self.constraints]
         with open("{}.json".format(filename), 'w') as fp:
             json.dump(toDump, fp)
-    
-    def read_uncertainties_from_json(self, file: json):
-        """
-        Reads in a json of action and til uncertainties, such that the uncertainty x = sd/mean. Updates edges with
-        distributions and makes edges probabilistic. Returns a PSTN.
-        """
-        with open(file) as f:
-            uncertainties = json.load(f)
-        actions, tils = uncertainties["actions"], uncertainties["tils"]
-        for action in actions:
-            for constraint in self.constraints:
-                if action["description"] in constraint.label:
-                    if constraint.type == "stc":
-                        assert constraint.ub == constraint.lb
-                        constraint.distribution = {"mean": constraint.ub, "sd": constraint.ub * action["uncertainty"]}
-                        constraint.type = "pstc"
-                    else:
-                        raise ValueError("Uncertainties already added to costraints.")
-        for til in tils:
-            for constraint in self.constraints:
-                if til["description"] in constraint.label:
-                    if constraint.type == "stc":
-                        assert constraint.ub == constraint.lb
-                        constraint.distribution = {"mean": constraint.ub, "sd": constraint.ub * til["uncertainty"]}
-                        constraint.type = "pstc"
-                    else:
-                        raise ValueError("Uncertainties already added to constraints.")
-
 
 class ProbabilisticTemporalNetwork(TemporalNetwork):
     """
@@ -646,19 +776,6 @@ class ProbabilisticTemporalNetwork(TemporalNetwork):
         corr_pstn.time_points = copy.deepcopy(self.time_points)
         corr_pstn.constraints = copy.deepcopy(self.constraints)
         return corr_pstn
-
-    def print_dot_graph(self):
-        """
-        print the graph in DOT format.
-        """
-        print("digraph G {")
-        # declare nodes
-        for time_point in self.time_points:
-            print("\t" + str(time_point.id) + " [label=\"" + time_point.label + "\"];")
-        # declare edges
-        for constraint in self.constraints:
-            print("\t{} -> {} [label=\"({},{})\"];".format(constraint.source, constraint.sink, constraint.lb, constraint.ub))
-        print("}")
     
     def plot_dot_graph(self):
         """
@@ -672,11 +789,11 @@ class ProbabilisticTemporalNetwork(TemporalNetwork):
             plot.node(name=str(timePoint.id), label=str(timePoint.id))
         
         for constraint in requirements:
-            plot.edge(str(constraint.source.id), str(constraint.sink.id), label="{}: [{}, {}]".format(constraint.get_description(), constraint.lb, constraint.ub))
+            plot.edge(str(constraint.source.id), str(constraint.sink.id), label="{}: [{}, {}]".format(constraint.label, constraint.lb, constraint.ub))
         for constraint in probabilistics:
-            plot.edge(str(constraint.source.id), str(constraint.sink.id), label="{}: N({}, {})".format(constraint.get_description(), constraint.mean, constraint.sd))
+            plot.edge(str(constraint.source.id), str(constraint.sink.id), label="{}: N({}, {})".format(constraint.label, constraint.mean, constraint.sd))
         try:
-            plot.render('logs/plot.png', view=True)
+            plot.render('logs/{}.png'.format(self.name), view=True)
         except subprocess.CalledProcessError:
             print("Please close the PDF and rerun the script")
     
