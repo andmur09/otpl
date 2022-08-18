@@ -7,11 +7,3 @@ antlr-4.9-complete.jar
 
 # vscode settings
 .vscode
-
-#local
-exaples/test.py
-generate_random_uncertainties.py
-logs/
-problems/
-test.json
-test.py
