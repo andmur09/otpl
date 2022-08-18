@@ -11,9 +11,9 @@ setup(
     description='Open Task Planning Library',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/andmur09/otpl',
+    url='https://github.com/taskplanning/otpl',
     project_urls = {
-        "Bug Tracker": "https://github.com/andmur09/otpl/issues"
+        "Bug Tracker": "https://github.com/taskplanning/otpl/issues"
     },
     license='LICENSE.txt',
     packages=find_packages(),
