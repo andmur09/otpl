@@ -1,14 +1,14 @@
 import numpy as np
 
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.domain import Domain
-from pddl.effect import Effect, EffectType
-from pddl.goal_descriptor import GoalDescriptor, GoalType
-from pddl.operator import Operator
-from pddl.state import State
-from pddl.symbol_table import SymbolTable
-from pddl.time_spec import TimeSpec
-from pddl.timed_initial_literal import TimedInitialLiteral
+from atomic_formula import AtomicFormula, TypedParameter
+from domain import Domain
+from effect import Effect, EffectType
+from goal_descriptor import GoalDescriptor, GoalType
+from operator import Operator
+from state import State
+from symbol_table import SymbolTable
+from time_spec import TimeSpec
+from timed_initial_literal import TimedInitialLiteral
 
 class Grounding:
 
