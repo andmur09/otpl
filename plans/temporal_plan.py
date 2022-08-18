@@ -292,7 +292,7 @@ class PlanTemporalNetwork:
     # simulated execution #
     # =================== #
 
-    def simulate_execution(self, problem : Problem = None, until_time : float = None) -> tuple[State,list[TimedInitialLiteral]]:
+    def simulate_execution(self, problem : Problem = None, until_time : float = None):
         """
         Execute the plan on the given problem, returning the resultant state and remaining TILs.
         Actions still executing are converted into TILs and TIFs. Note that the returned TILs and TIFs will
