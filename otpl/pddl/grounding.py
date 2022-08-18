@@ -1,9 +1,9 @@
 import numpy as np
 
-from atomic_formula import AtomicFormula, TypedParameter
-from domain import Domain
-from effect import Effect, EffectType
-from goal_descriptor import GoalDescriptor, GoalType
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.domain import Domain
+from otpl.pddl.effect import Effect, EffectType
+from otpl.pddl.goal_descriptor import GoalDescriptor, GoalType
 from operator import Operator
 from state import State
 from symbol_table import SymbolTable
