@@ -176,7 +176,6 @@ class Grounding:
         obj_count = 1
         for param in params[::-1]:
             obj_count = self.type_counts[param.type]
-            #print(self.type_symbol_tables)
             id = id * obj_count + self.type_symbol_tables[param.type].get_symbol_id(param.value)
         return id
 
