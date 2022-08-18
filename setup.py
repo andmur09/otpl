@@ -17,5 +17,5 @@ setup(
     },
     license='LICENSE.txt',
     packages=find_packages(),
-    install_requires=['antlr4-python3-runtime==4.10', 'numpy', 're'],
+    install_requires=['antlr4-python3-runtime==4.10', 'numpy'],
 )
