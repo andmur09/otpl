@@ -1,13 +1,7 @@
 #from msilib.schema import Error
 from queue import PriorityQueue
-import json
 from xmlrpc.client import Boolean
-import copy
-from math import inf
-import numpy as np
-from scipy import stats
-import subprocess
-from graphviz import Digraph
+
 
 class SimpleTemporalNetwork:
     """
@@ -33,14 +27,11 @@ class SimpleTemporalNetwork:
         add an edge to the network with duration bound.
         update the duration bound only if tighter than the current one.
         """
-        print("\n", node1, node2, label)
         if node1 not in self.edges:
             self.edges[node1] = {}
             self.edge_labels[node1] = {}
         if node2 not in self.edges[node1]:
             self.edges[node1][node2] = duration_bound
-            print(self.edge_labels)
-            print(self.edges)
             self.edge_labels[node1][node2] = label
         elif duration_bound < self.edges[node1][node2]:
             self.edges[node1][node2] = duration_bound

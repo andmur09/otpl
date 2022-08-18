@@ -287,3 +287,56 @@ class PlanTemporalNetwork:
                     dist = self.temporal_network.find_shortest_path(source, sink)
                     if -self.epsilon < dist:
                         self.temporal_network.add_edge(source, sink, "Interference Constraint between {} and {}".format(sink, source), distance)
+
+    # =================== #
+    # simulated execution #
+    # =================== #
+
+    def simulate_execution(self, problem : Problem = None, until_time : float = None) -> tuple[State,list[TimedInitialLiteral]]:
+        """
+        Execute the plan on the given problem, returning the resultant state and remaining TILs.
+        Actions still executing are converted into TILs and TIFs. Note that the returned TILs and TIFs will
+        include some effects that are not normally allowed in PDDL as TIL/TIF, for example conditional effects
+        and more complex numeric effects. These will not appear in a printed PDDL problem.
+        param problem: The problem on which to execute the plan, if none then the problem used to parse the plan.
+        param until_time: Float time to stop execution, if none then the whole plan is executed.
+        """
+        if problem is None: problem = self.problem
+        current_state = problem.get_initial_state()
+        current_happening_index = 0
+        current_actions : set[int] = set()
+        until_time = until_time if until_time is not None else self.time_sorted_happenings[-1].time
+
+        while current_happening_index < len(self.time_sorted_happenings):
+
+            # move time forwards
+            happening = self.time_sorted_happenings[current_happening_index]
+            if until_time < happening.time:
+                current_state.time = until_time
+                break
+            current_state.time = happening.time
+
+            # apply effects of the happening
+            if happening.type == HappeningType.PLAN_START:
+                pass
+            elif happening.type == HappeningType.TIMED_INITIAL_LITERAL:
+                problem.grounding.apply_simple_til_effects(happening.til, current_state)
+            elif happening.type == HappeningType.ACTION_START:
+                problem.grounding.apply_simple_action_effects(happening.action_id, current_state, time_spec=TimeSpec.AT_START)
+                current_actions.add(happening.id)
+            elif happening.type == HappeningType.ACTION_END:
+                problem.grounding.apply_simple_action_effects(happening.action_id, current_state, time_spec=TimeSpec.AT_END)
+                current_actions.remove(happening.id - 1)
+
+            # move to next happening
+            current_happening_index += 1
+
+        # create new tils for currently executing actions
+        tils = [ ]
+        for happening_id in current_actions:
+            time = self.happenings[happening_id+1].time
+            action = problem.grounding.get_action_from_id(self.happenings[happening_id].action_id)
+            effect = action.effect.filter_effects_to_time_spec(TimeSpec.AT_END)
+            tils.append(TimedInitialLiteral(time, effect))
+
+        return current_state, tils
