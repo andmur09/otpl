@@ -1,25 +1,25 @@
 import argparse
 import sys
 from antlr4 import CommonTokenStream, FileStream
-from grammar.pddl22Lexer import pddl22Lexer
-from grammar.pddl22Parser import pddl22Parser
-from derived_predicate import DerivedPredicate
-from effect_assignment import AssignmentType, Assignment
-from effect import Effect, EffectConditional, EffectConjunction, EffectForall, EffectNegative, EffectSimple, TimedEffect
-from expression import ExprBase, ExprComposite
-from time_spec import TimeSpec
-from grammar.pddl22Parser import pddl22Parser
-from grammar.pddl22Visitor import pddl22Visitor
-from domain import Domain
-from domain_type import DomainType
-from atomic_formula import AtomicFormula, TypedParameter
-from goal_descriptor_inequality import Inequality
-from operator import Operator
-from duration import DurationType, Duration, DurationConjunction, DurationInequality, DurationTimed
-from goal_descriptor import GoalConjunction, GoalDescriptor, GoalDisjunction, GoalImplication, GoalNegative, GoalQuantified, GoalSimple, GoalType, TimedGoal
-from metric import Metric, MetricSpec
-from problem import Problem
-from timed_initial_literal import TimedInitialLiteral
+from pddl.grammar.pddl22Lexer import pddl22Lexer
+from pddl.grammar.pddl22Parser import pddl22Parser
+from pddl.derived_predicate import DerivedPredicate
+from pddl.effect_assignment import AssignmentType, Assignment
+from pddl.effect import Effect, EffectConditional, EffectConjunction, EffectForall, EffectNegative, EffectSimple, TimedEffect
+from pddl.expression import ExprBase, ExprComposite
+from pddl.time_spec import TimeSpec
+from pddl.grammar.pddl22Parser import pddl22Parser
+from pddl.grammar.pddl22Visitor import pddl22Visitor
+from pddl.domain import Domain
+from pddl.domain_type import DomainType
+from pddl.atomic_formula import AtomicFormula, TypedParameter
+from pddl.goal_descriptor_inequality import Inequality
+from pddl.operator import Operator
+from pddl.duration import DurationType, Duration, DurationConjunction, DurationInequality, DurationTimed
+from pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalDisjunction, GoalImplication, GoalNegative, GoalQuantified, GoalSimple, GoalType, TimedGoal
+from pddl.metric import Metric, MetricSpec
+from pddl.problem import Problem
+from pddl.timed_initial_literal import TimedInitialLiteral
 
 class Parser(pddl22Visitor):
     """
