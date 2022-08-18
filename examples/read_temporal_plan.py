@@ -1,7 +1,7 @@
 import argparse
-from pddl.parser import Parser
-from pddl.grounding import Grounding
-from plans.temporal_plan import PlanTemporalNetwork
+from otpl.pddl.parser import Parser
+from otpl.pddl.grounding import Grounding
+from otpl.plans.temporal_plan import PlanTemporalNetwork
 
 if __name__ == "__main__":
     """

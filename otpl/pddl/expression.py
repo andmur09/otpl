@@ -1,5 +1,5 @@
 from enum import Enum
-from pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
 
 class ExprBase:
     """

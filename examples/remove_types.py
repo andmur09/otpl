@@ -1,11 +1,11 @@
 from examples.create_temporal_problem import create_temporal_problem
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.domain import Domain
-from pddl.domain_type import DomainType
-from pddl.effect import EffectConditional, EffectConjunction, EffectForall, EffectType
-from pddl.goal_descriptor import GoalConjunction, GoalQuantified, GoalSimple, GoalType
-from pddl.operator import Operator
-from pddl.problem import Problem
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.domain import Domain
+from otpl.pddl.domain_type import DomainType
+from otpl.pddl.effect import EffectConditional, EffectConjunction, EffectForall, EffectType
+from otpl.pddl.goal_descriptor import GoalConjunction, GoalQuantified, GoalSimple, GoalType
+from otpl.pddl.operator import Operator
+from otpl.pddl.problem import Problem
 
 # ====== #
 # domain #

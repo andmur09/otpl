@@ -1,7 +1,7 @@
 from enum import Enum
-from pddl.atomic_formula import TypedParameter
-from pddl.goal_descriptor import GoalDescriptor, GoalType
-from pddl.expression import ExprComposite
+from otpl.pddl.atomic_formula import TypedParameter
+from otpl.pddl.goal_descriptor import GoalDescriptor, GoalType
+from otpl.pddl.expression import ExprComposite
 
 
 class Inequality(GoalDescriptor):

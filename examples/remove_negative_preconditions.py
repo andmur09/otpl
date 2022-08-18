@@ -1,8 +1,8 @@
 from examples.create_temporal_domain import create_temporal_domain
 from examples.normalise_domain import _simplify_conditions
-from pddl.domain import Domain
-from pddl.effect import Effect, EffectConditional, EffectConjunction, EffectForall, EffectNegative, EffectSimple, EffectType, TimedEffect
-from pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalDisjunction, GoalNegative, GoalQuantified, GoalSimple, TimedGoal
+from otpl.pddl.domain import Domain
+from otpl.pddl.effect import Effect, EffectConditional, EffectConjunction, EffectForall, EffectNegative, EffectSimple, EffectType, TimedEffect
+from otpl.pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalDisjunction, GoalNegative, GoalQuantified, GoalSimple, TimedGoal
 
 def _negate_negative_precondition(condition : GoalNegative, negative_predicate_map : dict) -> GoalDescriptor:
     """

@@ -1,11 +1,11 @@
 import itertools
 from examples.remove_types import remove_types_from_domain
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.derived_predicate import DerivedPredicate
-from pddl.domain import Domain
-from pddl.effect import Effect, EffectConditional, EffectConjunction, EffectForall, EffectNegative, EffectSimple
-from pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalDisjunction, GoalImplication, GoalNegative, GoalQuantified, GoalSimple, GoalType
-from pddl.operator import Operator
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.derived_predicate import DerivedPredicate
+from otpl.pddl.domain import Domain
+from otpl.pddl.effect import Effect, EffectConditional, EffectConjunction, EffectForall, EffectNegative, EffectSimple
+from otpl.pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalDisjunction, GoalImplication, GoalNegative, GoalQuantified, GoalSimple, GoalType
+from otpl.pddl.operator import Operator
 
 def normalise_domain(domain : Domain):
     """

@@ -3,11 +3,11 @@ import sys
 import time
 
 import numpy as np
-from pddl.atomic_formula import TypedParameter
-from pddl.grounding import Grounding
-from pddl.operator import Operator
-from pddl.domain import Domain
-from pddl.problem import Problem
+from otpl.pddl.atomic_formula import TypedParameter
+from otpl.pddl.grounding import Grounding
+from otpl.pddl.operator import Operator
+from otpl.pddl.domain import Domain
+from otpl.pddl.problem import Problem
 
 class PlanSequential:
     """

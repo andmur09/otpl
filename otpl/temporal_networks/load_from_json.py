@@ -1,5 +1,5 @@
 import json
-from temporal_networks.simple_temporal_network import SimpleTemporalNetwork
+from otpl.temporal_networks.simple_temporal_network import SimpleTemporalNetwork
 
 def load_from_json(filename):
     """

@@ -1,6 +1,6 @@
 from numpy import negative
 from examples.create_temporal_domain import create_temporal_domain
-from pddl.problem import Problem
+from otpl.pddl.problem import Problem
 
 def create_temporal_problem() -> Problem:
 

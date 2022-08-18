@@ -1,6 +1,6 @@
 from enum import Enum
-from pddl.atomic_formula import TypedParameter
-from pddl.expression import ExprComposite
+from otpl.pddl.atomic_formula import TypedParameter
+from otpl.pddl.expression import ExprComposite
 
 class MetricSpec(Enum):
     MIN = "minimize"

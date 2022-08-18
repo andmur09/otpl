@@ -1,8 +1,8 @@
 from enum import Enum
 from typing import Union
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.goal_descriptor_inequality import Inequality
-from pddl.time_spec import TimeSpec
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.goal_descriptor_inequality import Inequality
+from otpl.pddl.time_spec import TimeSpec
 
 class DurationType(Enum):
     EMPTY       = "unconstrained"

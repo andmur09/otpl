@@ -3,8 +3,8 @@ This file defines and implements the basic goal descriptors for PDDL2.2.
 The implementation of comparison goals is implemented in DomainInequality.
 """
 from enum import Enum
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.time_spec import TimeSpec 
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.time_spec import TimeSpec 
 
 
 class GoalType(Enum):

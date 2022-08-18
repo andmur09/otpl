@@ -3,16 +3,16 @@ from lib2to3.pgen2.token import TILDE
 from logging import raiseExceptions
 from time import time
 import numpy as np
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.domain import Domain
-from pddl.effect import Effect, EffectType
-from pddl.goal_descriptor import GoalDescriptor, GoalType
-from pddl.problem import Problem
-from pddl.grounding import Grounding
-from pddl.operator import Operator
-from pddl.time_spec import TimeSpec
-from pddl.timed_initial_literal import TimedInitialLiteral
-from temporal_networks.simple_temporal_network import SimpleTemporalNetwork
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.domain import Domain
+from otpl.pddl.effect import Effect, EffectType
+from otpl.pddl.goal_descriptor import GoalDescriptor, GoalType
+from otpl.pddl.problem import Problem
+from otpl.pddl.grounding import Grounding
+from otpl.pddl.operator import Operator
+from otpl.pddl.time_spec import TimeSpec
+from otpl.pddl.timed_initial_literal import TimedInitialLiteral
+from otpl.temporal_networks.simple_temporal_network import SimpleTemporalNetwork
 import re
 
 class HappeningType(Enum):

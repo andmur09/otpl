@@ -4,11 +4,11 @@ from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
 from otpl.pddl.domain import Domain
 from otpl.pddl.effect import Effect, EffectType
 from otpl.pddl.goal_descriptor import GoalDescriptor, GoalType
-from operator import Operator
-from state import State
-from symbol_table import SymbolTable
-from time_spec import TimeSpec
-from timed_initial_literal import TimedInitialLiteral
+from otpl.pddl.operator import Operator
+from otpl.pddl.state import State
+from otpl.pddl.symbol_table import SymbolTable
+from otpl.pddl.time_spec import TimeSpec
+from otpl.pddl.timed_initial_literal import TimedInitialLiteral
 
 class Grounding:
 

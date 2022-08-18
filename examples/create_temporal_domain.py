@@ -1,9 +1,9 @@
-from pddl.domain import Domain
-from pddl.effect_assignment import AssignmentType
-from pddl.problem import Problem
-from pddl.grounding import Grounding
-from pddl.time_spec import TimeSpec
-from plans.temporal_plan import PlanTemporalNetwork
+from otpl.pddl.domain import Domain
+from otpl.pddl.effect_assignment import AssignmentType
+from otpl.pddl.problem import Problem
+from otpl.pddl.grounding import Grounding
+from otpl.pddl.time_spec import TimeSpec
+from otpl.plans.temporal_plan import PlanTemporalNetwork
 
 def create_temporal_domain() -> Domain:
         

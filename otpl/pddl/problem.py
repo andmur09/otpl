@@ -1,13 +1,13 @@
 import numpy as np
 
-from pddl.domain import Domain
-from pddl.effect import EffectNegative, EffectSimple, EffectType
-from pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalSimple, GoalType
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.metric import Metric
-from pddl.state import State
-from pddl.timed_initial_literal import TimedInitialLiteral
-from pddl.grounding import Grounding
+from otpl.pddl.domain import Domain
+from otpl.pddl.effect import EffectNegative, EffectSimple, EffectType
+from otpl.pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalSimple, GoalType
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.metric import Metric
+from otpl.pddl.state import State
+from otpl.pddl.timed_initial_literal import TimedInitialLiteral
+from otpl.pddl.grounding import Grounding
 
 class Problem:
     """

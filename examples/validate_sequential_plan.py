@@ -1,11 +1,11 @@
 import argparse
 import sys
 import time
-from pddl.parser import Parser
-from pddl.grounding import Grounding
-from pddl.domain import Domain
-from pddl.problem import Problem
-from plans.sequential_plan import PlanSequential
+from otpl.pddl.parser import Parser
+from otpl.pddl.grounding import Grounding
+from otpl.pddl.domain import Domain
+from otpl.pddl.problem import Problem
+from otpl.plans.sequential_plan import PlanSequential
 
 if __name__ == "__main__":
     """

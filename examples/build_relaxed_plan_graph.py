@@ -1,9 +1,9 @@
 import argparse
 import sys
 import time
-from pddl.grounding import Grounding
-from plan_graphs.relaxed_plan_graph import RelaxedPlanGraph
-from pddl.parser import Parser
+from otpl.pddl.grounding import Grounding
+from otpl.plan_graphs.relaxed_plan_graph import RelaxedPlanGraph
+from otpl.pddl.parser import Parser
 
 if __name__ == "__main__":
     """

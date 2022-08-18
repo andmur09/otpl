@@ -1,5 +1,5 @@
-from pddl.effect import Effect, EffectSimple, EffectType
-from pddl.effect_assignment import Assignment, AssignmentType
+from otpl.pddl.effect import Effect, EffectSimple, EffectType
+from otpl.pddl.effect_assignment import Assignment, AssignmentType
 
 
 class TimedInitialLiteral:
