@@ -1,5 +1,5 @@
 import json
-from temporal_network import TemporalNetwork
+from temporal_networks.simple_temporal_network import SimpleTemporalNetwork
 
 def load_from_json(filename):
     """
@@ -11,7 +11,7 @@ def load_from_json(filename):
     
     # Instantiates an empty temporal network
     nodes, edges = data["nodes"], data["constraints"]
-    network = TemporalNetwork()
+    network = SimpleTemporalNetwork()
 
     # Adds the nodes and edges
     for node in nodes:
