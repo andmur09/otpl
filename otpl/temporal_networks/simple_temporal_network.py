@@ -133,6 +133,6 @@ class SimpleTemporalNetwork:
             for node2 in self.edges[node1]:
                 if node1 == node2: continue
                 if self.edges[node1][node2] == float("inf"): continue
-                print("\t\t{\"source\": " + str(node1) + ", \"target\": " + str(node2) + ", \"label\": \"" + self.edges[node1][node2] + "\", \"bounds\": " + str(self.edges[node1][node2]) + "},")
+                print("\t\t{\"source\": " + str(node1) + ", \"sink\": " + str(node2) + ", \"label\": \"" + self.edge_labels[node1][node2] + "\", \"bounds\": " + str(self.edges[node1][node2]) + "},")
         print("\t]")
         print("}")
