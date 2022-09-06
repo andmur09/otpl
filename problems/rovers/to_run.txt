@@ -1,7 +1,0 @@
-instance-6.pddl
-instance-9.pddl
-instance-14.pddl
-instance-15.pddl
-instance-17.pddl
-instance-19.pddl
-instance-20.pddl

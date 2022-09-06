@@ -1,1 +1,0 @@
-{"actions": [{"name": "communicate_soil_data", "mean_fraction": 0.7539253499398405, "sd_fraction": 0.10159306709376653}, {"name": "drop", "mean_fraction": 1.2990655029582705, "sd_fraction": 0.10586468702177501}, {"name": "navigate", "mean_fraction": 1.2716714731331709, "sd_fraction": 0.18575736598005876}], "tils": []}

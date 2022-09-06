@@ -1,1 +1,0 @@
-{"actions": [{"name": "communicate_image_data", "mean_fraction": 1.0066389438755388, "sd_fraction": 0.12494283807826413}, {"name": "communicate_rock_data", "mean_fraction": 1.0232043874586911, "sd_fraction": 0.14868546178844103}, {"name": "navigate", "mean_fraction": 1.0295491396504997, "sd_fraction": 0.22944276663875768}], "tils": []}
