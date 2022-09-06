@@ -1,0 +1,1 @@
+{"actions": [{"name": "recharge", "mean_fraction": 1.1633497219649902, "sd_fraction": 0.12458049786410491}, {"name": "take_image", "mean_fraction": 0.8905233120565925, "sd_fraction": 0.17696417169510453}, {"name": "calibrate", "mean_fraction": 1.155735797954609, "sd_fraction": 0.18513235641756584}], "tils": []}

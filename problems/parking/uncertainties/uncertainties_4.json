@@ -1,0 +1,1 @@
+{"actions": [{"name": "move-curb-to-curb", "mean_fraction": 1.1567721485827385, "sd_fraction": 0.18118610415372738}, {"name": "move-car-to-curb", "mean_fraction": 0.8163255638046791, "sd_fraction": 0.185861555604251}], "tils": []}

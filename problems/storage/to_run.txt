@@ -1,0 +1,10 @@
+instance-1.pddl
+instance-2.pddl
+instance-3.pddl
+instance-4.pddl
+instance-5.pddl
+instance-6.pddl
+instance-7.pddl
+instance-8.pddl
+instance-9.pddl
+instance-10.pddl

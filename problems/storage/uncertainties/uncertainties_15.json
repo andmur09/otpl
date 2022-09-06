@@ -1,0 +1,1 @@
+{"actions": [{"name": "move", "mean_fraction": 1.2606783539915973, "sd_fraction": 0.11985474975198443}, {"name": "lift", "mean_fraction": 1.071968842260125, "sd_fraction": 0.1507356580490208}, {"name": "go-out", "mean_fraction": 1.167058140964982, "sd_fraction": 0.20993618881567583}], "tils": []}
