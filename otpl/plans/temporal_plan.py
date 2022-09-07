@@ -243,7 +243,8 @@ class PlanTemporalNetwork:
             # add edge to plan start if any conditions remain
             if np.any(pos) or np.any(neg):
                 print("WARNING: Unsupported conditions remain after planning.")
-                self.temporal_network.add_edge(happening.id, 0, 0.0)
+                self.temporal_network.add_edge(happening.id, 0, "Unsupported condition edge at {}".format(happening.id), 0.0)
+
 
     def add_interference_edges(self, happening_index, support_index, pos_support, neg_support, condition_time_spec):
 
