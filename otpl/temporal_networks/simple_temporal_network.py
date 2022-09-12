@@ -47,6 +47,7 @@ class SimpleTemporalNetwork:
             for node2 in self.nodes:
                 if node1 != node2 and node2 not in self.edges[node1]:
                     self.edges[node1][node2] = float("inf")
+                    self.edge_labels[node1][node2] = "APSP edge between {} and {}".format(node1, node2)
         # run Floyd-Warshall
         for k in self.nodes:
             for i in self.nodes:
@@ -100,8 +101,10 @@ class SimpleTemporalNetwork:
                     if self.edges[i][j] < self.edges[i][k] + self.edges[k][j]: continue
                     if self.edges[i][j] < 0 and self.edges[i][k] < 0:
                         del self.edges[i][j]
+                        del self.edge_labels[i][j]
                     elif self.edges[i][j] >=0 and self.edges[k][j] >= 0:
                         del self.edges[i][j]
+                        del self.edge_labels[i][j]
                         
     def print_dot_graph(self):
         """
