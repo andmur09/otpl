@@ -96,8 +96,8 @@ class PlanTemporalNetwork:
             self.happenings.append(til_node)
 
             # create edge from TIL to plan start
-            self.temporal_network.add_edge(0, node_id, til.time)
-            self.temporal_network.add_edge(node_id, 0, -til.time)
+            self.temporal_network.add_edge(0, node_id, "TIL: "+str(til.effect), til.time)
+            self.temporal_network.add_edge(node_id, 0, "TIL: "+str(til.effect), -til.time)
 
     def parse_actions(self, plan_file):
         # read actions and create nodesx
