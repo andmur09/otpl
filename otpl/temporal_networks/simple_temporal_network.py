@@ -48,14 +48,17 @@ class SimpleTemporalNetwork:
                     self.edges[node1][node2] = float("inf")
                     self.edge_labels[node1][node2] = "APSP edge between {} and {}".format(node1, node2)
         # run Floyd-Warshall
-        self.print_graph_as_json()
         for i in self.nodes:
             for j in self.nodes:
                 for k in self.nodes:
                     self.edges[i][k] = min(self.edges[i][k], self.edges[i][j] + self.edges[j][k])
                     # check for negative cycles
-                    if i==k and self.edges[i][k] < 0:
-                        return False
+                    # if i==k and self.edges[i][k] < 0:
+                    #     return False
+        for i in self.nodes:
+            if self.edges[i][i] < 0:
+                print("Negatice cycle found at :", i)
+                return False
         return True
 
     def find_shortest_path(self, source : int, sink : int) -> float:
