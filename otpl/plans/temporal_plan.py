@@ -47,7 +47,7 @@ class PlanTemporalNetwork:
         self.problem : Problem = problem
         self.grounding : Grounding = problem.grounding
 
-        self.epsilon = 0.01
+        self.epsilon = 0.001
         self.infinity = 1000000000
         
         # map temporal network nodes to happenings
