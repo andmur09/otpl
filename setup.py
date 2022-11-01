@@ -11,7 +11,7 @@ setup(
     description='Open Task Planning Library',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url='https://github.com/andmur09/otpl',
+    url='https://github.com/strathclyde-artificial-intelligence/otpl',
     project_urls = {
         "Bug Tracker": "https://github.com/taskplanning/otpl/issues"
     },

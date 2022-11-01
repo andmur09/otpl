@@ -15,6 +15,11 @@ Use the [examples](examples) directory to see more.
 
 OTPL makes use of type hinting generics (e.g. `l : list[str] = ()`) introduced in **Python 3.9**.
 
+Install using pip:
+```bash
+pip install git+https://github.com/strathclyde-artificial-intelligence/otpl.git
+```
+
 Install the runtime requirements using:
 ```bash
 pip install -r requirements.txt
