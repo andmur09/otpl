@@ -1,5 +1,5 @@
-from pddl.goal_descriptor import GoalDescriptor
-from pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.goal_descriptor import GoalDescriptor
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
 
 
 class DerivedPredicate:

@@ -1,8 +1,8 @@
 import numpy as np
-from pddl.domain import Domain
-from pddl.grounding import Grounding
-from pddl.problem import Problem
-from pddl.state import State
+from otpl.pddl.domain import Domain
+from otpl.pddl.grounding import Grounding
+from otpl.pddl.problem import Problem
+from otpl.pddl.state import State
 
 class RelaxedPlanGraph:
 

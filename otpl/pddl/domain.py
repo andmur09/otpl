@@ -1,8 +1,8 @@
-from pddl.derived_predicate import DerivedPredicate
-from pddl.domain_type import DomainType
-from pddl.operator import Operator
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.symbol_table import SymbolTable
+from otpl.pddl.derived_predicate import DerivedPredicate
+from otpl.pddl.domain_type import DomainType
+from otpl.pddl.operator import Operator
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.symbol_table import SymbolTable
 
 class Domain:
     """

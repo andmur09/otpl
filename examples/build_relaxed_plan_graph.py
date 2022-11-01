@@ -1,9 +1,9 @@
 import argparse
 import sys
 import time
-from pddl.grounding import Grounding
-from plan_graphs.relaxed_plan_graph import RelaxedPlanGraph
-from pddl.parser import Parser
+from otpl.pddl.grounding import Grounding
+from otpl.plan_graphs.relaxed_plan_graph import RelaxedPlanGraph
+from otpl.pddl.parser import Parser
 
 if __name__ == "__main__":
     """
@@ -11,7 +11,6 @@ if __name__ == "__main__":
     First it parses the PDDL domain and problem files.
     Then it builds the relaxed plan graph.
     """
-
     # ground command line arguments
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument("domain", help="path to PDDL domain file")

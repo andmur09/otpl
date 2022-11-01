@@ -1,7 +1,7 @@
 import numpy as np
-from pddl.parser import Parser
+from otpl.pddl.parser import Parser
 from time import time
-from plan_graphs.relaxed_plan_graph import RelaxedPlanGraph
+from otpl.plan_graphs.relaxed_plan_graph import RelaxedPlanGraph
 
 """
 This file is testing computing mutex relations.

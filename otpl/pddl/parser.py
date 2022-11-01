@@ -1,25 +1,25 @@
 import argparse
 import sys
 from antlr4 import CommonTokenStream, FileStream
-from pddl.grammar.pddl22Lexer import pddl22Lexer
-from pddl.grammar.pddl22Parser import pddl22Parser
-from pddl.derived_predicate import DerivedPredicate
-from pddl.effect_assignment import AssignmentType, Assignment
-from pddl.effect import Effect, EffectConditional, EffectConjunction, EffectForall, EffectNegative, EffectSimple, TimedEffect
-from pddl.expression import ExprBase, ExprComposite
-from pddl.time_spec import TimeSpec
-from pddl.grammar.pddl22Parser import pddl22Parser
-from pddl.grammar.pddl22Visitor import pddl22Visitor
-from pddl.domain import Domain
-from pddl.domain_type import DomainType
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.goal_descriptor_inequality import Inequality
-from pddl.operator import Operator
-from pddl.duration import DurationType, Duration, DurationConjunction, DurationInequality, DurationTimed
-from pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalDisjunction, GoalImplication, GoalNegative, GoalQuantified, GoalSimple, GoalType, TimedGoal
-from pddl.metric import Metric, MetricSpec
-from pddl.problem import Problem
-from pddl.timed_initial_literal import TimedInitialLiteral
+from otpl.pddl.grammar.pddl22Lexer import pddl22Lexer
+from otpl.pddl.grammar.pddl22Parser import pddl22Parser
+from otpl.pddl.derived_predicate import DerivedPredicate
+from otpl.pddl.effect_assignment import AssignmentType, Assignment
+from otpl.pddl.effect import Effect, EffectConditional, EffectConjunction, EffectForall, EffectNegative, EffectSimple, TimedEffect
+from otpl.pddl.expression import ExprBase, ExprComposite
+from otpl.pddl.time_spec import TimeSpec
+from otpl.pddl.grammar.pddl22Parser import pddl22Parser
+from otpl.pddl.grammar.pddl22Visitor import pddl22Visitor
+from otpl.pddl.domain import Domain
+from otpl.pddl.domain_type import DomainType
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.goal_descriptor_inequality import Inequality
+from otpl.pddl.operator import Operator
+from otpl.pddl.duration import DurationType, Duration, DurationConjunction, DurationInequality, DurationTimed
+from otpl.pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalDisjunction, GoalImplication, GoalNegative, GoalQuantified, GoalSimple, GoalType, TimedGoal
+from otpl.pddl.metric import Metric, MetricSpec
+from otpl.pddl.problem import Problem
+from otpl.pddl.timed_initial_literal import TimedInitialLiteral
 
 class Parser(pddl22Visitor):
     """

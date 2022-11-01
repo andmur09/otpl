@@ -3,12 +3,12 @@ from queue import PriorityQueue
 import sys
 import time
 
-from pddl.parser import Parser
-from pddl.domain import Domain
-from pddl.problem import Problem
-from pddl.grounding import Grounding
-from plan_graphs.relaxed_plan_graph import RelaxedPlanGraph
-from plans.sequential_plan import PlanSequential
+from otpl.pddl.parser import Parser
+from otpl.pddl.domain import Domain
+from otpl.pddl.problem import Problem
+from otpl.pddl.grounding import Grounding
+from otpl.plan_graphs.relaxed_plan_graph import RelaxedPlanGraph
+from otpl.plans.sequential_plan import PlanSequential
 
 class PriorityState:
 

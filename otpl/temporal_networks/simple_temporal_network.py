@@ -2,7 +2,6 @@
 from queue import PriorityQueue
 from xmlrpc.client import Boolean
 
-
 class SimpleTemporalNetwork:
     """
     represents a simple temporal network as a graph.
@@ -47,14 +46,19 @@ class SimpleTemporalNetwork:
             for node2 in self.nodes:
                 if node1 != node2 and node2 not in self.edges[node1]:
                     self.edges[node1][node2] = float("inf")
+                    self.edge_labels[node1][node2] = "APSP edge between {} and {}".format(node1, node2)
         # run Floyd-Warshall
-        for k in self.nodes:
-            for i in self.nodes:
-                for j in self.nodes:
-                    self.edges[i][j] = min(self.edges[i][j], self.edges[i][k] + self.edges[k][j])
+        for i in self.nodes:
+            for j in self.nodes:
+                for k in self.nodes:
+                    self.edges[i][k] = min(self.edges[i][k], self.edges[i][j] + self.edges[j][k])
                     # check for negative cycles
-                    if i==j and self.edges[i][j] < 0:
-                        return False
+                    # if i==k and self.edges[i][k] < 0:
+                    #     return False
+        for i in self.nodes:
+            if self.edges[i][i] < 0:
+                print("Negatice cycle found at :", i)
+                return False
         return True
 
     def find_shortest_path(self, source : int, sink : int) -> float:
@@ -81,7 +85,7 @@ class SimpleTemporalNetwork:
 
     def make_minimal(self):
         """
-        removes redundant edges from the network, assuming that the
+        removes redundant edges from the netw, jork, assuming that the
         network is temporally consistent and already in all-pairs
         shortest path form.
         Reference:
@@ -100,8 +104,10 @@ class SimpleTemporalNetwork:
                     if self.edges[i][j] < self.edges[i][k] + self.edges[k][j]: continue
                     if self.edges[i][j] < 0 and self.edges[i][k] < 0:
                         del self.edges[i][j]
+                        del self.edge_labels[i][j]
                     elif self.edges[i][j] >=0 and self.edges[k][j] >= 0:
                         del self.edges[i][j]
+                        del self.edge_labels[i][j]
                         
     def print_dot_graph(self):
         """
@@ -132,7 +138,7 @@ class SimpleTemporalNetwork:
         for node1 in self.nodes:
             for node2 in self.edges[node1]:
                 if node1 == node2: continue
-                if self.edges[node1][node2] == float("inf"): continue
-                print("\t\t{\"source\": " + str(node1) + ", \"target\": " + str(node2) + ", \"label\": \"" + self.edges[node1][node2] + "\", \"bounds\": " + str(self.edges[node1][node2]) + "},")
+                #if self.edges[node1][node2] == float("inf"): continue
+                print("\t\t{\"source\": " + str(node1) + ", \"sink\": " + str(node2) + ", \"label\": \"" + self.edge_labels[node1][node2] + "\", \"bounds\": " + str(self.edges[node1][node2]) + "},")
         print("\t]")
         print("}")

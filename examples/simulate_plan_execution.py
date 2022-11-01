@@ -1,4 +1,4 @@
-from plans.temporal_plan import PlanTemporalNetwork
+from otpl.plans.temporal_plan import PlanTemporalNetwork
 from examples.create_temporal_domain import create_temporal_domain
 from examples.create_temporal_problem import create_temporal_problem
 

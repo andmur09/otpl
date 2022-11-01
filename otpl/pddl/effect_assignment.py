@@ -1,7 +1,7 @@
 from enum import Enum
-from pddl.effect import Effect, EffectType
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.expression import ExprComposite
+from otpl.pddl.effect import Effect, EffectType
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.expression import ExprComposite
 
 
 class AssignmentType(Enum):

@@ -3,16 +3,16 @@ from lib2to3.pgen2.token import TILDE
 from logging import raiseExceptions
 from time import time
 import numpy as np
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.domain import Domain
-from pddl.effect import Effect, EffectType
-from pddl.goal_descriptor import GoalDescriptor, GoalType
-from pddl.problem import Problem
-from pddl.grounding import Grounding
-from pddl.operator import Operator
-from pddl.time_spec import TimeSpec
-from pddl.timed_initial_literal import TimedInitialLiteral
-from temporal_networks.simple_temporal_network import SimpleTemporalNetwork
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.domain import Domain
+from otpl.pddl.effect import Effect, EffectType
+from otpl.pddl.goal_descriptor import GoalDescriptor, GoalType
+from otpl.pddl.problem import Problem
+from otpl.pddl.grounding import Grounding
+from otpl.pddl.operator import Operator
+from otpl.pddl.time_spec import TimeSpec
+from otpl.pddl.timed_initial_literal import TimedInitialLiteral
+from otpl.temporal_networks.simple_temporal_network import SimpleTemporalNetwork
 import re
 
 class HappeningType(Enum):
@@ -47,7 +47,7 @@ class PlanTemporalNetwork:
         self.problem : Problem = problem
         self.grounding : Grounding = problem.grounding
 
-        self.epsilon = 0.01
+        self.epsilon = 0.001
         self.infinity = 1000000000
         
         # map temporal network nodes to happenings
@@ -96,8 +96,8 @@ class PlanTemporalNetwork:
             self.happenings.append(til_node)
 
             # create edge from TIL to plan start
-            self.temporal_network.add_edge(0, node_id, til.time)
-            self.temporal_network.add_edge(node_id, 0, -til.time)
+            self.temporal_network.add_edge(0, node_id, "TIL: "+str(til.effect), til.time)
+            self.temporal_network.add_edge(node_id, 0, "TIL: "+str(til.effect), -til.time)
 
     def parse_actions(self, plan_file):
         # read actions and create nodesx
@@ -243,7 +243,8 @@ class PlanTemporalNetwork:
             # add edge to plan start if any conditions remain
             if np.any(pos) or np.any(neg):
                 print("WARNING: Unsupported conditions remain after planning.")
-                self.temporal_network.add_edge(happening.id, 0, 0.0)
+                self.temporal_network.add_edge(happening.id, 0, "Unsupported condition edge at {}".format(happening.id), 0.0)
+
 
     def add_interference_edges(self, happening_index, support_index, pos_support, neg_support, condition_time_spec):
 

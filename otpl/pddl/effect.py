@@ -3,10 +3,10 @@ This file defines and implements the basic effects for PDDL2.2.
 The implementation of assignment goals is implemented in DomainAssignment.
 """
 from enum import Enum
-from pddl.goal_descriptor import GoalDescriptor
-from pddl.expression import ExprComposite
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.time_spec import TimeSpec
+from otpl.pddl.goal_descriptor import GoalDescriptor
+from otpl.pddl.expression import ExprComposite
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.time_spec import TimeSpec
         
 
 class EffectType(Enum):

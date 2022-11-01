@@ -1,11 +1,11 @@
-from pddl.duration import Duration, DurationInequality
-from pddl.atomic_formula import AtomicFormula, TypedParameter
-from pddl.effect import Effect, EffectConjunction, EffectNegative, EffectSimple, EffectType, TimedEffect
-from pddl.effect_assignment import Assignment, AssignmentType
-from pddl.expression import ExprBase, ExprComposite
-from pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalNegative, GoalSimple, GoalType, TimedGoal
-from pddl.goal_descriptor_inequality import Inequality
-from pddl.time_spec import TimeSpec
+from otpl.pddl.duration import Duration, DurationInequality
+from otpl.pddl.atomic_formula import AtomicFormula, TypedParameter
+from otpl.pddl.effect import Effect, EffectConjunction, EffectNegative, EffectSimple, EffectType, TimedEffect
+from otpl.pddl.effect_assignment import Assignment, AssignmentType
+from otpl.pddl.expression import ExprBase, ExprComposite
+from otpl.pddl.goal_descriptor import GoalConjunction, GoalDescriptor, GoalNegative, GoalSimple, GoalType, TimedGoal
+from otpl.pddl.goal_descriptor_inequality import Inequality
+from otpl.pddl.time_spec import TimeSpec
 
 
 class Operator:
